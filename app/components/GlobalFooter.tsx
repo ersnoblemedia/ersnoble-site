@@ -34,13 +34,13 @@ export default function ErsnobleMasterFooter() {
             <h5 className="text-[10px] font-black uppercase tracking-[0.6em] text-[#008BFF]">Contact_Protocol</h5>
             <ul className="space-y-4 font-mono">
               <li>
-                <a href="mailto:intelligence@ersnoble.com" className="flex items-center gap-3 group">
+                <a href="mailto:info@ersnoblemedia.com" className="flex items-center gap-3 group">
                   <Mail size={14} className="text-white/20 group-hover:text-[#008BFF] transition-colors" />
                   <span className="text-[11px] md:text-[12px] text-white/50 group-hover:text-white transition-colors tracking-tight">INFO@ERSNOBLEMEDIA.COM</span>
                 </a>
               </li>
               <li>
-                <a href="tel:+2348100000000" className="flex items-center gap-3 group">
+                <a href="tel:+2348066210504" className="flex items-center gap-3 group">
                   <Phone size={14} className="text-white/20 group-hover:text-[#008BFF] transition-colors" />
                   <span className="text-[11px] md:text-[12px] text-white/50 group-hover:text-white transition-colors tracking-tight">+234 (0) 806 621 0504</span>
                 </a>
