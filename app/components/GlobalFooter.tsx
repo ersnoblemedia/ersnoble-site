@@ -54,8 +54,8 @@ export default function ErsnobleMasterFooter() {
             <div className="flex items-start gap-3">
               <MapPin size={14} className="text-white/20 mt-1" />
               <p className="text-[11px] md:text-[12px] text-white/50 font-mono leading-relaxed uppercase tracking-tight">
-                Corporate Suite 402 <br />
-                Uyo, Akwa Ibom State <br />
+                Corporate Suite 09 Inyang<br />
+                Str. Uyo, Akwa Ibom State <br />
                 Nigeria, West Africa
               </p>
             </div>

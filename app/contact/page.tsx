@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowRight, CheckCircle2, Globe2, 
-  ChevronRight, Lock, Activity, Phone, Clock
+  ChevronRight, Lock, Activity, Phone, Clock, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,6 +18,8 @@ export default function ErsnobleContactPortal() {
     phone: "",
     Requirements: [] as string[],
     timeline: "Strategic (30-60 Days)",
+    budget: "To be Discussed",
+    customBudget: "", // Track custom value
     Mandate_Context: ""
   });
 
@@ -44,6 +46,8 @@ export default function ErsnobleContactPortal() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const finalBudget = formData.budget === "Custom" ? formData.customBudget : formData.budget;
+
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
@@ -53,6 +57,7 @@ export default function ErsnobleContactPortal() {
           "DIRECT LINE": formData.phone,
           "SERVICES INTERESTED": formData.Requirements.join(", "),
           "PROJECT TIMELINE": formData.timeline,
+          "CAPITAL ALLOCATION": finalBudget,
           "ADDITIONAL CONTEXT": formData.Mandate_Context
         }),
         headers: {
@@ -76,7 +81,10 @@ export default function ErsnobleContactPortal() {
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { 
+      duration: 0.6, 
+      ease: [0.22, 1, 0.36, 1] as any 
+    }
   };
 
   return (
@@ -145,7 +153,7 @@ export default function ErsnobleContactPortal() {
                   </motion.div>
                 )}
 
-                {/* PHASE 02: SERVICES & TIMELINE */}
+                {/* PHASE 02: SERVICES, TIMELINE & BUDGET */}
                 {phase === 2 && (
                   <motion.div {...fadeInUp} className="space-y-12">
                     <div className="space-y-6">
@@ -181,13 +189,51 @@ export default function ErsnobleContactPortal() {
                           <button 
                             key={t.l} type="button" 
                             onClick={() => setFormData({ ...formData, timeline: t.v })} 
-                            className={`p-5 rounded-xl border text-center transition-all ${formData.timeline === t.v ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]" : "bg-white/5 border-white/10 text-white/40 hover:text-white"}`}
+                            className={`p-5 rounded-xl border text-center transition-all ${formData.timeline === t.v ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]" : "bg-white/5 border-white/10 text-white/60 hover:text-white"}`}
                           >
                             <div className="text-[10px] font-black uppercase tracking-widest">{t.l}</div>
-                            <div className="text-[7px] uppercase tracking-widest opacity-60 mt-1">{t.s}</div>
+                            <div className="text-[7px] uppercase tracking-widest opacity-80 mt-1">{t.s}</div>
                           </button>
                         ))}
                       </div>
+                    </div>
+
+                    {/* BUDGET SECTION */}
+                    <div className="space-y-6">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[#008BFF] flex items-center gap-2">
+                        <ShieldCheck size={12} /> Capital Allocation
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {["$1k - $5k+", "$5k - $15k", "$15k - $50k", "Custom"].map((b) => (
+                          <button 
+                            key={b} type="button" 
+                            onClick={() => setFormData({ ...formData, budget: b })} 
+                            className={`p-4 rounded-xl border text-center transition-all text-[9px] font-black uppercase tracking-widest ${formData.budget === b ? "bg-[#008BFF] text-white border-[#008BFF] shadow-[0_0_20px_rgba(0,139,255,0.3)]" : "bg-white/5 border-white/10 text-white/60 hover:text-white"}`}
+                          >
+                            {b}
+                          </button>
+                        ))}
+                      </div>
+                      
+                      {/* CONDITIONAL CUSTOM BUDGET INPUT */}
+                      <AnimatePresence>
+                        {formData.budget === "Custom" && (
+                          <motion.div 
+                            initial={{ height: 0, opacity: 0 }} 
+                            animate={{ height: "auto", opacity: 1 }} 
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <input 
+                              type="text" 
+                              placeholder="SPECIFY YOUR ALLOCATION RANGE..." 
+                              value={formData.customBudget}
+                              onChange={(e) => setFormData({...formData, customBudget: e.target.value})}
+                              className="w-full bg-white/5 border border-[#008BFF]/30 rounded-xl p-4 outline-none focus:border-[#008BFF] transition-all uppercase text-[10px] tracking-widest placeholder:text-white/20"
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
 
                     <button type="button" onClick={nextPhase} className="group flex items-center gap-6 bg-white text-black px-12 py-6 rounded-full text-[10px] font-black uppercase tracking-[0.4em] hover:bg-[#008BFF] hover:text-white transition-all duration-500">

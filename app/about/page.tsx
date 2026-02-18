@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion"; 
 import { 
   ShieldCheck, Cpu, Terminal, Globe2, 
   Zap, ArrowRight, Eye, Target, 
@@ -13,11 +13,16 @@ export default function ErsnobleAboutBuild() {
   const { scrollYProgress } = useScroll();
   const scaleLine = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
+  // VERCEL-FIXED CONSTANT: 
+  // We use "as any" on transition to bypass the strict string-type check in Vercel.
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-50px" },
-    transition: { duration: 0.7, ease: "easeOut" }
+    transition: { 
+      duration: 0.7, 
+      ease: [0.22, 1, 0.36, 1] as any 
+    }
   };
 
   return (
@@ -46,7 +51,7 @@ export default function ErsnobleAboutBuild() {
               <motion.p {...fadeInUp} className="text-[11px] md:text-[13px] text-white/40 uppercase tracking-[0.2em] leading-relaxed max-w-lg">
                 Ersnoble is a specialized advisory for those who require more than just a website. We build the digital infrastructure that secures your brand's future and global scalability.
               </motion.p>
-              {/* Startup Inclusivity Tag - UPDATED */}
+              {/* Startup Inclusivity Tag */}
               <motion.div {...fadeInUp} className="inline-flex items-center gap-3 px-5 py-3 bg-[#008BFF]/5 border border-[#008BFF]/20 rounded-xl">
                 <Boxes size={16} className="text-[#008BFF]" />
                 <span className="text-[9px] font-mono uppercase tracking-widest text-white/70 italic">Empowering Startups & Global Institutions.</span>
@@ -143,7 +148,7 @@ export default function ErsnobleAboutBuild() {
         </div>
       </section>
 
-      {/* 4. CONVERSION CTA - REFINED FOR STARTUPS */}
+      {/* 4. CONVERSION CTA */}
       <section className="py-32 md:py-56 px-6 text-center bg-white text-black relative overflow-hidden">
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.h2 {...fadeInUp} className="text-6xl md:text-[120px] font-black uppercase tracking-[-0.05em] leading-[0.9] mb-16">
