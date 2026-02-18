@@ -2,21 +2,42 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}", // This tells Tailwind to look inside your src folder
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "#050505",
-        foreground: "#FFFFFF",
-        accent: {
-          DEFAULT: "#6366f1",
-          dark: "#4338ca",
-        },
-        surface: "#111111",
+        accent: "#008BFF", // Ensure this matches your Ersnoble blue
       },
+      animation: {
+        'scan': 'scan 3s linear infinite',
+      },
+      keyframes: {
+        scan: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(1000%)' }, // Adjust percentage based on square height
+        }
+      }
     },
   },
   plugins: [],
 };
 export default config;
+
+module.exports = {
+  theme: {
+    extend: {
+      animation: {
+        'scan': 'scan 2s linear infinite',
+      },
+      keyframes: {
+        scan: {
+          '0%': { top: '-10%' },
+          '100%': { top: '110%' },
+        }
+      }
+    },
+  },
+}

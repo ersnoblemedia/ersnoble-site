@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
+@custom-variant hover (&:hover);
+@theme {
+  --color-accent: #008BFF;
+  --color-accent-dark: #0066CC;
+}
+
+@keyframes move-bg {
+from { background-position: 0 0; }
+to { background-position: 200% 0; }
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #050505; /* Rich Obsidian */
+  --foreground: #e5e5e5;
+  --accent: #008BFF;    /* Electric Azure */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Global Styles */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* The Glass Card Effect */
+.glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 139, 255, 0.4);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+}
+
+/* Accent Color Utility */
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 139, 255, 0.4); 
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #020202;
+}
+::-webkit-scrollbar-thumb {
+  background: #008BFF;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #008BFF;
 }
