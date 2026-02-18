@@ -1,12 +1,12 @@
 "use client";
-import React, { useRef, use } from "react";
+import React, { useRef, use, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Activity } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft, Activity, Zap } from "lucide-react";
+import Link from "next/link"; // Aligned with Homepage
 
-// 1. DATA ARCHIVE
+// 1. DATA ARCHIVE - IDs ALIGNED WITH HOMEPAGE
 const projectData: any = {
-  "ersnoble-redesign": {
+  "ersnoble-ecosystem": { // Changed from 'redesign' to 'ecosystem' to match Home
     title: "Ersnoble",
     subtitle: "Digital Sovereignty.",
     category: "System Redesign // Advisory",
@@ -32,7 +32,6 @@ const projectData: any = {
   }
 };
 
-// 2. INTERNAL GLOW COMPONENT
 const ScrollGlowText = ({ children }: { children: React.ReactNode }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -40,67 +39,78 @@ const ScrollGlowText = ({ children }: { children: React.ReactNode }) => {
     offset: ["start 90%", "center center"], 
   });
 
-  // EDIT OPACITY HERE: [Initial Value, Final Value]
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.6, 1]); 
-  
-  const y = useTransform(scrollYProgress, [0, 1], [20, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.4, 1]); 
+  const y = useTransform(scrollYProgress, [0, 1], [30, 0]);
   const textShadow = useTransform(
     scrollYProgress,
     [0, 1],
-    ["0px 0px 0px rgba(0,139,255,0)", "0px 0px 15px rgba(0,139,255,0.3)"]
+    ["0px 0px 0px rgba(0,139,255,0)", "0px 0px 20px rgba(0,139,255,0.4)"]
   );
 
   return (
-    <motion.div ref={ref} style={{ opacity, y, textShadow }} transition={{ duration: 0.8 }}>
+    <motion.div ref={ref} style={{ opacity, y, textShadow }} transition={{ duration: 0.8, ease: "easeOut" }}>
       {children}
     </motion.div>
   );
 };
 
-// 3. MAIN PAGE COMPONENT
 export default function ProjectDetailView({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const project = projectData[id] || projectData["ersnoble-redesign"];
+  // Fallback to ecosystem if ID doesn't match
+  const project = projectData[id] || projectData["ersnoble-ecosystem"];
+  
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
 
   return (
     <main className="bg-[#020202] text-white min-h-screen pb-24 selection:bg-[#008BFF] overflow-x-hidden relative">
       
-      {/* AMBIENT BACKGROUND GLOW */}
-      <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[#008BFF]/5 blur-[180px] pointer-events-none rounded-full z-0" />
+      {/* GLOW ALIGNED WITH HOMEPAGE */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0 opacity-20 transition-opacity duration-1000 hidden md:block"
+        style={{ 
+          background: `radial-gradient(circle 600px at ${mousePos.x}px ${mousePos.y}px, rgba(0, 139, 255, 0.15), transparent 80%)` 
+        }} 
+      />
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-20 md:hidden bg-[radial-gradient(circle_at_50%_50%,rgba(0,139,255,0.15),transparent_70%)]" />
 
       {/* NAVIGATION */}
-      <nav className="fixed top-0 w-full z-50 px-6 md:px-12 py-10 flex justify-between items-center bg-black/50 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 w-full z-50 px-6 md:px-12 py-8 flex justify-between items-center bg-black/60 backdrop-blur-2xl border-b border-white/5">
         <Link href="/#works" className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-[#008BFF] transition-all">
-          <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform" />
+          <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform duration-500" />
           <span>Exit_to_Archive</span>
         </Link>
-        <div className="text-[10px] font-mono text-white/20 uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/10">
-          Project_ID: {id.toUpperCase().replace('-', '_')}
+        <div className="text-[10px] font-mono text-[#008BFF] uppercase tracking-widest bg-[#008BFF]/5 px-4 py-2 rounded-full border border-[#008BFF]/20">
+          System_Node: {id.toUpperCase().replace('-', '_')}
         </div>
       </nav>
 
       {/* HERO SECTION */}
-      <section className="pt-40 md:pt-60 px-6 md:px-12 lg:px-24 border-b border-white/5 pb-20 relative z-10">
-        <div className="max-w-[1800px] mx-auto grid lg:grid-cols-2 gap-12 md:gap-20 items-end">
+      <section className="pt-48 md:pt-64 px-6 md:px-12 lg:px-24 border-b border-white/5 pb-24 relative z-10">
+        <div className="max-w-[1800px] mx-auto grid lg:grid-cols-2 gap-16 md:gap-24 items-end">
           <motion.div 
-            initial={{ opacity: 0, x: -30 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ duration: 1, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 40 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] as any }}
           >
-            <h1 className="text-5xl md:text-8xl lg:text-[110px] font-black uppercase tracking-tighter leading-[0.85] mb-12">
-              {project.title} <br /> <span className="text-white/10 italic">{project.subtitle}</span>
+            <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.8] mb-12">
+              {project.title} <br /> 
+              <span className="text-white/10 italic font-light">{project.subtitle}</span>
             </h1>
-            <div className="flex flex-wrap gap-3 font-mono text-[9px] uppercase tracking-widest text-white/40">
-              <span className="px-4 py-2 border border-white/10 rounded-full bg-white/[0.02] tracking-[0.6em]">{project.category}</span>
+            <div className="inline-block px-5 py-2 border border-[#008BFF]/30 rounded-full bg-[#008BFF]/5 font-mono text-[10px] uppercase tracking-[0.4em] text-[#008BFF]">
+              {project.category}
             </div>
           </motion.div>
 
-          {/* EXECUTIVE SUMMARY BOX */}
-          <div className="bg-white/[0.02] border border-white/10 p-8 md:p-12 rounded-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#008BFF] shadow-[0_0_15px_#008BFF]" />
-            <h3 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20 mb-8 underline decoration-[#008BFF] underline-offset-8">Executive Summary</h3>
+          <div className="group bg-white/[0.01] border border-white/5 p-8 md:p-14 rounded-2xl relative overflow-hidden transition-all duration-700 hover:border-[#008BFF]/30">
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#008BFF] shadow-[0_0_20px_#008BFF]" />
+            <h3 className="text-[10px] font-black uppercase tracking-[0.6em] text-white/30 mb-8">Executive_Briefing</h3>
             <ScrollGlowText>
-              <p className="text-lg md:text-2xl lg:text-3xl font-light leading-relaxed text-white italic tracking-tight italic opacity-100">
+              <p className="text-xl md:text-3xl lg:text-4xl font-light leading-snug text-white tracking-tight italic">
                 "{project.summary}"
               </p>
             </ScrollGlowText>
@@ -109,47 +119,53 @@ export default function ProjectDetailView({ params }: { params: Promise<{ id: st
       </section>
 
       {/* STATS GRID */}
-      <section className="py-20 md:py-32 px-6 md:px-12 lg:px-24 bg-[#050505] relative z-10">
-        <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+      <section className="py-0 px-6 md:px-12 lg:px-24 bg-[#020202] relative z-10">
+        <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border-x border-white/5">
           {project.details.map((item: any, i: number) => (
             <motion.div 
               key={i} 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: i * 0.2, duration: 0.8 }}
               viewport={{ once: true }}
-              className="bg-black p-10 md:p-16 space-y-6 group hover:bg-[#080808] transition-all relative"
+              className="bg-[#020202] p-12 md:p-20 space-y-8 group transition-all duration-700 relative overflow-hidden border-b border-white/5"
             >
-              <span className="text-[10px] font-mono text-[#008BFF] tracking-widest uppercase opacity-60">Proprietary_Logic_{i+1}</span>
-              <h4 className="text-xl md:text-2xl font-black uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">{item.label}</h4>
-              <p className="text-sm md:text-lg font-bold text-white uppercase tracking-tighter">{item.value}</p>
-              <div className="absolute bottom-0 left-0 w-0 h-1 bg-[#008BFF] group-hover:w-full transition-all duration-700 shadow-[0_0_15px_#008BFF]" />
+              <div className="flex justify-between items-start">
+                <span className="text-[9px] font-mono text-[#008BFF] tracking-[0.5em] uppercase opacity-40">PROTOCOL_0{i+1}</span>
+                <Zap size={14} className="text-white/5 group-hover:text-[#008BFF] transition-colors duration-500" />
+              </div>
+              <div>
+                <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-white mb-4">{item.label}</h4>
+                <p className="text-xl md:text-2xl font-bold text-white uppercase tracking-tighter leading-tight group-hover:translate-x-2 transition-transform duration-700">{item.value}</p>
+              </div>
+              <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#008BFF] group-hover:w-full transition-all duration-1000 ease-in-out shadow-[0_0_20px_#008BFF]" />
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* OUTCOME SECTION */}
-      <section className="py-20 px-6 md:px-12 lg:px-24 border-t border-white/5 relative z-10">
-        <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="space-y-4 max-w-2xl text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-[#008BFF] text-[10px] font-black uppercase tracking-widest">
-              <Activity size={14}/> Operational_Outcome
+      <section className="py-32 md:py-48 px-6 md:px-12 lg:px-24 relative z-10 overflow-hidden">
+        <div className="max-w-[1800px] mx-auto flex flex-col lg:flex-row justify-between items-center gap-20">
+          <div className="space-y-6 max-w-3xl text-center md:text-left">
+            <div className="inline-flex items-center gap-3 text-[#008BFF] text-[10px] font-black uppercase tracking-[0.6em] mb-4">
+              <Activity size={16} className="animate-pulse"/> Operational_Validation
             </div>
             <ScrollGlowText>
-              <p className="text-white text-lg md:text-2xl lg:text-3xl uppercase tracking-wider leading-relaxed">
+              <h2 className="text-white text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.9]">
                 {project.outcome}
-              </p>
+              </h2>
             </ScrollGlowText>
           </div>
           
-          <Link href="/contact" className="group relative bg-white text-black px-12 py-6 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-[#008BFF] hover:text-white transition-all duration-500 overflow-hidden">
-            <span className="relative z-10">Initialize Protocol</span>
-            <div className="absolute inset-0 bg-[#008BFF] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+          <Link href="/contact" className="group relative bg-white text-black px-16 py-8 text-[11px] font-black uppercase tracking-[0.5em] hover:bg-[#008BFF] hover:text-white transition-all duration-700 overflow-hidden shadow-[0_0_50px_rgba(255,255,255,0.05)]">
+            <span className="relative z-10 flex items-center gap-4">
+              Initialize Mandate <Activity size={16} />
+            </span>
+            <div className="absolute inset-0 bg-[#008BFF] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.22, 1, 0.36, 1]" />
           </Link>
         </div>
       </section>
-
     </main>
   );
 }
