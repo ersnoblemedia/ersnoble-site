@@ -1,9 +1,9 @@
 "use client";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion"; // Added AnimatePresence
 import { 
   ArrowRight, ArrowUpRight, Monitor, Smartphone, 
   PenTool, Globe, Layers, Search, Rocket, Activity, 
-  ShieldCheck, Code2, Terminal, Cpu
+  ShieldCheck, Code2, Terminal, Cpu, X, Menu // Added X and Menu icons
 } from "lucide-react"; 
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
@@ -14,7 +14,8 @@ export default function ErsnobleMasterBuild() {
   const scaleLine = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // New state for mobile menu
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
@@ -23,7 +24,21 @@ export default function ErsnobleMasterBuild() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // FIXED: Explicit type casting for 'ease' to pass Vercel Build
+  // Menu Animation Variants
+  const menuVariants = {
+    closed: { opacity: 0, y: "-100%", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+    open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
+  };
+
+  const linkVariants = {
+    closed: { opacity: 0, x: -20 },
+    open: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: "easeOut" }
+    })
+  };
+
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -41,50 +56,97 @@ export default function ErsnobleMasterBuild() {
       <div className="fixed inset-0 pointer-events-none z-0 opacity-40 hidden md:block"
         style={{ background: `radial-gradient(circle 600px at ${mousePos.x}px ${mousePos.y}px, rgba(0, 139, 255, 0.12), transparent 80%)` }}
       />
-      {/* Mobile-Specific Ambient Glow (Static for Performance) */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-20 md:hidden bg-[radial-gradient(circle_at_50%_50%,rgba(0,139,255,0.15),transparent_70%)]" />
 
-      {/* 2. NAVIGATION */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/[0.05] bg-black/60 backdrop-blur-2xl">
+      {/* 2. NAVIGATION - UPDATED WITH FULL-SCREEN LOGIC */}
+      <nav className="fixed top-0 w-full z-[100] border-b border-white/[0.05] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-24 h-20 md:h-24 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="group">
+          
+          <div className="flex items-center gap-4 md:gap-8 z-[110]">
+            <Link href="/" className="group flex-shrink-0">
               <img 
                 src="/logo.svg" 
                 alt="Ersnoble" 
-                className="h-6 md:h-8 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_10px_rgba(0,139,255,0.5)] transition-all duration-500" 
+                className="h-5 md:h-8 w-auto brightness-0 invert group-hover:drop-shadow-[0_0_10px_rgba(0,139,255,0.5)] transition-all duration-500" 
               />
             </Link>
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 border border-white/10 rounded-full bg-white/[0.02]">
+            <div className="hidden xs:flex items-center gap-2 px-3 py-1 border border-white/10 rounded-full bg-white/[0.02]">
               <div className="w-1.5 h-1.5 rounded-full bg-[#008BFF] animate-pulse" />
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/40">System Online</span>
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/40">Online</span>
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-16">
+          <div className="hidden lg:flex items-center gap-12 xl:gap-16">
             {[
               { name: "About", href: "/about" },
               { name: "Ecosystem", href: "#ecosystem" },
               { name: "Works", href: "#works" }
             ].map((item) => (
-              <Link 
-                key={item.name} 
-                href={item.href} 
-                className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 hover:text-white transition-colors"
-              >
+              <Link key={item.name} href={item.href} className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 hover:text-white transition-colors">
                 {item.name}
               </Link>
             ))}
           </div>
 
-          <Link 
-            href="/contact" 
-            className="bg-[#008BFF] text-white px-5 md:px-10 py-3 md:py-4 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] hover:bg-white hover:text-[#008BFF] transition-all shadow-[0_0_20px_rgba(0,139,255,0.2)]"
-          >
-            Secure Consultation
-          </Link>
+          <div className="flex items-center gap-4 z-[110]">
+            {/* MOBILE MENU TRIGGER */}
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden p-3 text-white focus:outline-none"
+            >
+              {isMenuOpen ? <X size={20} /> : <span className="text-[9px] font-black uppercase tracking-widest text-white/40 border border-white/10 px-3 py-2 rounded">Menu</span>}
+            </button>
+            
+            <Link 
+              href="/contact" 
+              className="bg-[#008BFF] text-white px-4 md:px-10 py-3 md:py-4 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] hover:bg-white hover:text-[#008BFF] transition-all shadow-[0_0_20px_rgba(0,139,255,0.2)] whitespace-nowrap"
+            >
+              <span className="hidden sm:inline">Secure Consultation</span>
+              <span className="sm:hidden">Consult</span>
+            </Link>
+          </div>
         </div>
       </nav>
+
+      {/* FULL SCREEN MOBILE OVERLAY */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            variants={menuVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className="fixed inset-0 z-[90] bg-[#020202] flex flex-col justify-center px-8 lg:hidden"
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#008BFF]/10 blur-[100px] rounded-full" />
+            
+            <div className="relative z-10 space-y-12">
+              <div className="flex items-center gap-3 text-[#008BFF] font-mono text-[10px] tracking-[0.5em] uppercase mb-8">
+                <Terminal size={14} /> System_Menu
+              </div>
+
+              <div className="flex flex-col gap-8">
+                {[
+                  { name: "About", href: "/about", sub: "Institutional Identity" },
+                  { name: "Ecosystem", href: "#ecosystem", sub: "Operational Power" },
+                  { name: "Works", href: "#works", sub: "Project Archives" },
+                  { name: "Contact", href: "/contact", sub: "Initialize Mandate" }
+                ].map((item, i) => (
+                  <motion.div key={item.name} custom={i} variants={linkVariants}>
+                    <Link href={item.href} onClick={() => setIsMenuOpen(false)} className="group block">
+                      <span className="text-[10px] font-mono text-white/20 block mb-2 uppercase tracking-widest">{item.sub}</span>
+                      <div className="flex items-center justify-between border-b border-white/5 pb-4 group-hover:border-[#008BFF] transition-colors">
+                        <span className="text-4xl font-black uppercase tracking-tighter">{item.name}</span>
+                        <ArrowRight size={20} className="text-[#008BFF]" />
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 3. HERO SECTION */}
       <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 pb-20">
@@ -116,7 +178,6 @@ export default function ErsnobleMasterBuild() {
             </motion.div>
           </div>
 
-          {/* DASHBOARD COMPONENT */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
@@ -124,7 +185,6 @@ export default function ErsnobleMasterBuild() {
             className="relative block group"
           >
             <div className="absolute -inset-1 bg-gradient-to-r from-[#008BFF] to-[#00D1FF] rounded-xl blur-xl lg:blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 animate-pulse" />
-            
             <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden relative z-10 shadow-2xl">
               <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-white/5 border-b border-white/10 font-mono text-[9px] md:text-[10px] text-white/30">
                 <div className="flex gap-2">
@@ -170,7 +230,6 @@ export default function ErsnobleMasterBuild() {
                 </div>
               </div>
             </div>
-            <div className="absolute -inset-10 bg-[#008BFF]/5 blur-[80px] md:blur-[120px] rounded-full z-0 pointer-events-none" />
           </motion.div>
         </div>
       </section>
@@ -240,20 +299,8 @@ export default function ErsnobleMasterBuild() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
             {[
-              {
-                id: "ersnoble-ecosystem",
-                title: "Ersnoble Digital Sovereignty",
-                category: "Fullstack Redesign // Institutional",
-                year: "2026",
-                img: "/Ersnoble_Media.png" 
-              },
-              {
-                id: "infoware-limited",
-                title: "Infoware Limited Systems",
-                category: "Infrastructure // Enterprise Tech",
-                year: "2024",
-                img: "/infowarelimited.png"
-              }
+              { id: "ersnoble-ecosystem", title: "Ersnoble Digital Sovereignty", category: "Fullstack Redesign // Institutional", year: "2026", img: "/Ersnoble_Media.png" },
+              { id: "infoware-limited", title: "Infoware Limited Systems", category: "Infrastructure // Enterprise Tech", year: "2024", img: "/infowarelimited.png" }
             ].map((work) => (
               <Link key={work.id} href={`/works/${work.id}`} className="group cursor-pointer block">
                 <motion.div {...fadeInUp}>
@@ -262,15 +309,11 @@ export default function ErsnobleMasterBuild() {
                       <img 
                         src={work.img} 
                         alt={work.title}
-                        className="absolute top-0 left-0 w-full h-auto min-h-full object-top grayscale opacity-60 
-                                  group-hover:grayscale-0 group-hover:opacity-100 
-                                  transition-all duration-[4000ms] ease-in-out transform
-                                  group-hover:translate-y-[calc(-100%+250px)] md:group-hover:translate-y-[calc(-100%+500px)]"
+                        className="absolute top-0 left-0 w-full h-auto min-h-full object-top grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-[4000ms] ease-in-out transform group-hover:translate-y-[calc(-100%+250px)] md:group-hover:translate-y-[calc(-100%+500px)]"
                       />
                     </div>
                     <div className="absolute inset-0 pointer-events-none border-[8px] md:border-[12px] border-[#020202] z-10" />
-                    <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none
-                                    bg-gradient-to-b from-[#008BFF]/5 via-transparent to-[#008BFF]/5" />
+                    <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-b from-[#008BFF]/5 via-transparent to-[#008BFF]/5" />
                     <div className="absolute bottom-6 right-6 z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
                       <div className="bg-[#008BFF] text-white p-3 rounded-full shadow-[0_0_20px_rgba(0,139,255,0.6)]">
                         <ArrowUpRight size={18} />
