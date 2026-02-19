@@ -1,9 +1,9 @@
 "use client";
-import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion"; // Added AnimatePresence
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion"; 
 import { 
   ArrowRight, ArrowUpRight, Monitor, Smartphone, 
   PenTool, Globe, Layers, Search, Rocket, Activity, 
-  ShieldCheck, Code2, Terminal, Cpu, X, Menu // Added X and Menu icons
+  ShieldCheck, Code2, Terminal, Cpu, X, Menu 
 } from "lucide-react"; 
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
@@ -14,7 +14,7 @@ export default function ErsnobleMasterBuild() {
   const scaleLine = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // New state for mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -24,10 +24,18 @@ export default function ErsnobleMasterBuild() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Menu Animation Variants
+  // FIXED: Added type assertions 'as any' to prevent Vercel build failure
   const menuVariants = {
-    closed: { opacity: 0, y: "-100%", transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-    open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
+    closed: { 
+      opacity: 0, 
+      y: "-100%", 
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as any } 
+    },
+    open: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as any } 
+    }
   };
 
   const linkVariants = {
@@ -35,7 +43,7 @@ export default function ErsnobleMasterBuild() {
     open: (i: number) => ({
       opacity: 1,
       x: 0,
-      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: "easeOut" }
+      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: "easeOut" as any }
     })
   };
 
@@ -58,7 +66,7 @@ export default function ErsnobleMasterBuild() {
       />
       <div className="fixed inset-0 pointer-events-none z-0 opacity-20 md:hidden bg-[radial-gradient(circle_at_50%_50%,rgba(0,139,255,0.15),transparent_70%)]" />
 
-      {/* 2. NAVIGATION - UPDATED WITH FULL-SCREEN LOGIC */}
+      {/* 2. NAVIGATION */}
       <nav className="fixed top-0 w-full z-[100] border-b border-white/[0.05] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-24 h-20 md:h-24 flex items-center justify-between">
           
@@ -89,7 +97,6 @@ export default function ErsnobleMasterBuild() {
           </div>
 
           <div className="flex items-center gap-4 z-[110]">
-            {/* MOBILE MENU TRIGGER */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-3 text-white focus:outline-none"
