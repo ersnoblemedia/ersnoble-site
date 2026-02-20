@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ersnoble | Engineering Technical Power",
+    title: "Ersnoble Media | Engineering Digital Engines & Visual Authority",
     description: "Built for the ambitious. High-velocity digital systems and institutional infrastructure.",
     images: ["/og-image.jpg"],
   },
