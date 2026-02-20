@@ -143,15 +143,15 @@ export default function ContactClient() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                       {[
                         { id: "Visual Identity", title: "Visual Authority", desc: "Logo, Brand Strategy & Premium Assets. We make you look like a market leader from Day 1." },
-                        { id: "Digital Infrastructure", title: "Institutional Website", desc: "Custom-coded, high-performance platforms. No templates. Built for conversion and scale." },
+                        { id: "Digital Infrastructure", title: "Institutional Website & Apps", desc: "Custom-coded, high-performance platforms. No templates. Built for conversion and scale." },
                         { id: "Technical Audit", title: "System Optimization", desc: "We repair and upgrade your existing tech for better speed, security, and lead capture." },
                         { id: "The Full Ecosystem", title: "Total Technical Sovereignty", desc: "Everything from branding to a fully automated digital sales engine. The complete package." }
                       ].map((s) => (
                         <label
                           key={s.id}
                           className={`group p-6 md:p-8 border-2 rounded-2xl md:rounded-3xl cursor-pointer transition-all duration-500 relative overflow-hidden ${formData.Requirements.includes(s.id)
-                              ? "bg-[#008BFF]/10 border-[#008BFF] shadow-[0_0_30px_rgba(0,139,255,0.1)]"
-                              : "bg-white/5 border-white/10 hover:border-white/30"
+                            ? "bg-[#008BFF]/10 border-[#008BFF] shadow-[0_0_30px_rgba(0,139,255,0.1)]"
+                            : "bg-white/5 border-white/10 hover:border-white/30"
                             }`}
                         >
                           <div className="flex justify-between items-start mb-4 relative z-10">
