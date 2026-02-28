@@ -38,11 +38,11 @@ export default function ErsnobleMasterFooter() {
             </h5>
             <ul className="space-y-5 font-mono">
               <li>
-                <a href="mailto:info@ersnoblemedia.com" className="flex items-center gap-4 group">
+                <a href="mailto:ersnoblemedia@gmail.com" className="flex items-center gap-4 group">
                   <div className="p-2 rounded-sm bg-white/[0.03] border border-white/10 group-hover:border-[#008BFF]/50 transition-colors">
                     <Mail size={14} className="text-white/40 group-hover:text-[#008BFF] transition-colors" />
                   </div>
-                  <span className="text-[11px] md:text-[12px] text-white/50 group-hover:text-white transition-colors tracking-tight uppercase">info@ersnoblemedia.com</span>
+                  <span className="text-[11px] md:text-[12px] text-white/50 group-hover:text-white transition-colors tracking-tight uppercase">ersnoblemedia@gmail.com</span>
                 </a>
               </li>
               <li>
