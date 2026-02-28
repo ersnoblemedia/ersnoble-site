@@ -15,6 +15,7 @@ export default function GlobalHeader() {
     { name: "About", href: "/about", sub: "Institutional Identity" },
     { name: "Ecosystem", href: isHome ? "#ecosystem" : "/#ecosystem", sub: "Operational Power" },
     { name: "Works", href: isHome ? "#works" : "/#works", sub: "Project Archives" },
+    { name: "Careers", href: "/careers", sub: "Careers" },
   ];
 
   // Animation Variants with TS Fixes for Vercel Builds

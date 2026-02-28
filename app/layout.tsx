@@ -4,7 +4,7 @@ import "./globals.css";
 import LayoutClientWrapper from "./components/LayoutClientWrapper";
 import GlobalHeader from "./components/GlobalHeader";
 import GlobalFooter from "./components/GlobalFooter";
-import Analytics from "./components/Analytics"; // Added Import
+import Analytics from "./components/Analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 

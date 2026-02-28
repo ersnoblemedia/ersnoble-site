@@ -7,7 +7,7 @@ export default function Analytics() {
         <>
             {/* Google Tag Manager / Analytics */}
             <Script
-                src={`https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX`} // Replace with your GA4 ID
+                src={`https://www.googletagmanager.com/gtag/js?id=G-KYBZQRXRSB`}
                 strategy="afterInteractive"
             />
             <Script id="google-analytics" strategy="afterInteractive">
@@ -15,7 +15,7 @@ export default function Analytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-XXXXXXXXXX');
+          gtag('config', 'G-KYBZQRXRSB');
         `}
             </Script>
 
